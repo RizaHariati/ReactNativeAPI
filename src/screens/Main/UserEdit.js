@@ -7,38 +7,28 @@ import {
 import ButtonInputs from "../../components/ButtonInputs";
 
 import InputField from "../../components/InputField";
-import useCreateNewUser from "../../components/useCreateNewUser";
+import useEditUser from "../../components/useEditUser";
 
 const UserEdit = ({ navigation, route }) => {
   const userData = route.params.user;
 
-  const [user, setUser] = useState({
-    name: userData.name,
-    email: userData.email,
-    gender: userData.gender,
-    status: userData.status,
-  });
+  const [user, setUser] = useState(userData);
   const [genderValue, setGenderValue] = useState(0);
   const [statusValue, setStatusValue] = useState(0);
 
-  const createUser = (user) => {
+  const handleEditUser = (user) => {
+    // console.log(user);
     if (user.name && user.email) {
-      const result = useCreateNewUser(user);
+      const result = useEditUser(user);
       result
         .then((res) => {
           if (res.status == 200 || res.status == 201) {
-            alert("user added");
-            setUser({
-              name: "",
-              email: "",
-              gender: "female",
-              status: "active",
-            });
+            alert("User edited");
             navigation.push("Users");
           }
         })
         .catch((err) => {
-          alert("data already exist or wrong format");
+          alert("wrong format");
         });
     } else {
       alert("field can't be empty");
@@ -93,7 +83,7 @@ const UserEdit = ({ navigation, route }) => {
           title="Edit"
           color={clrPrimaryDark}
           onPress={() => {
-            console.log(user);
+            handleEditUser(user);
           }}
         />
       </View>
